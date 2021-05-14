@@ -6,10 +6,22 @@ const app = express();
 const http = require('http');
 const httpServer = http.createServer(app);
 
-// We tell the socket.io server with a http server, something express do for us normally in the background in the method app.listen()
 const io = require('socket.io')(httpServer);
 
-app.use(express.static(path.join(__dirname, 'public')));
+const { default: axios } = require('axios');
+
+async function getQuiz() {
+	try {
+		const response = await axios.get('https://opentdb.com/api.php?amount=5&type=multiple');
+		console.log(response.data);
+	} catch (error) {
+		console.error(error.message);
+	}
+}
+
+console.log(getQuiz());
+
+https: app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname + '/public', 'index.html'));
