@@ -1,0 +1,53 @@
+.container {
+  width: 100%;
+  height: calc(100vh - 20px);
+  border: 2px solid black;
+  border-radius: 6px;
+}
+.chatSpace {
+  width: 100%;
+  height: calc(100% - 169px);
+}
+#myForm {
+  width: auto;
+  height: auto;
+  margin-bottom: 20px;
+  border-top: 2px solid black;
+  border-radius: 6px;
+  padding-top: 20px;
+}
+#myQuestion {
+  display: inline-block;
+  color: #1ad869;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid #1ad869;
+  padding: 14px 0;
+  border-radius: 6px;
+  transition: 0.2s linear;
+  width: calc(20% - 34px);
+  height: auto;
+  cursor: pointer;
+  margin-right: 20px;
+}
+#myQuestion:hover {
+  background-color: #1ad869;
+  color: #fff;
+}
+#mySubmit {
+  display: inline-block;
+  color: #ff4c4c;
+  font-size: 15px;
+  font-weight: 500;
+  width: 20%;
+  border: 1px solid #ff4c4c;
+  padding: 14px 0;
+  border-radius: 6px;
+  transition: 0.2s linear;
+  cursor: pointer;
+  margin-right: 20px;
+}
+#mySubmit:hover {
+  background-color: #ff4c4c;
+  color: #fff;
+}
