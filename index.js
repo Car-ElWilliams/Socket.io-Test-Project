@@ -55,10 +55,12 @@ io.on('connect', socket => {
 		console.log(`client${socket.id}`);
 
 		if (player === socket.id) {
-			socket.emit('PlayerLeft');
+			socket.emit('PlayerLeft', 'Player left the game');
 			totalOnlineCount--;
+			console.log('Player left', totalOnlineCount);
 		} else {
 			totalOnlineCount--;
+			console.log('Total players:', totalOnlineCount);
 		}
 	});
 });
