@@ -1,5 +1,5 @@
 let socekt = io();
 
-socket.on('PlayerLEft', msg => {
+socket.on('PlayerLeft', msg => {
 	alert('Player left');
 });
