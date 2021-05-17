@@ -13,7 +13,8 @@ const { default: axios } = require('axios');
 async function getQuiz() {
 	try {
 		const response = await axios.get('https://opentdb.com/api.php?amount=5&type=multiple');
-		console.log(response.data);
+		console.log(response.data.results);
+		return response.data.results[0].question;
 	} catch (error) {
 		console.error(error.message);
 	}
@@ -21,7 +22,15 @@ async function getQuiz() {
 
 console.log(getQuiz());
 
-https: app.use(express.static(path.join(__dirname, 'public')));
+//Variables
+
+let totalOnlineCount = 0;
+let player = null;
+let spectators = [];
+
+// Express
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname + '/public', 'index.html'));
@@ -29,24 +38,33 @@ app.get('/', (req, res) => {
 
 io.on('connect', socket => {
 	console.log(`A client connected with ID: ${socket.id}`);
+	totalOnlineCount++;
 
-	socket.on('message', msg => {
-		console.log(`client ${socket.id} says ${msg}`);
-		socket.send('Message baby!');
-		socket.emit('customEvent', 'Same as socket.send but I choose the name');
+	console.log(`totalOnlineCount = ${totalOnlineCount}`);
 
-		//Listens after custom events set by socket.emit()
-		//socket.on('customEvent', data => {
-		//	console.log(data);
-		//});
-	});
+	if (totalOnlineCount === 1) {
+		player = socket.id;
+	} else {
+		spectators.push(socket.id);
+		console.log(`totalOnlineCount = ${totalOnlineCount}`);
+		console.log(`Spectators = ${spectators}`);
+		console.log(`Player = ${player}`);
+	}
 
 	socket.on('disconnect', () => {
 		console.log(`client${socket.id}`);
+
+		if (player === socket.id) {
+			socket.emit('PlayerLeft');
+			totalOnlineCount--;
+		} else {
+			totalOnlineCount--;
+		}
 	});
 });
 
-// WARNING !!! app.listen(3000); will not work here, as it creates a new HTTP server
 httpServer.listen(8000, () => {
 	console.log('server listening at 8000');
 });
+
+module.exports = getQuiz;
