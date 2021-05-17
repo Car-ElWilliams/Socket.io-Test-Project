@@ -5,8 +5,10 @@
   border-radius: 6px;
 }
 .chatSpace {
-  width: 100%;
+  width: 95%;
   height: calc(100% - 169px);
+  margin-left: auto;
+  margin-right: auto;
 }
 #myForm {
   width: auto;
