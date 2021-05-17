@@ -42,7 +42,7 @@ io.on('connect', socket => {
 	});
 
 	socket.on('disconnect', () => {
-		console.log(`client${socket.id}`);
+		console.log(` A client ${socket.id} has left the website`);
 	});
 });
 
