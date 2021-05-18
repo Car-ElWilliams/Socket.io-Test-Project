@@ -36,35 +36,38 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname + '/public', 'index.html'));
 });
 
-io.of('/').on('connect', socket => {
-    console.log(`A client with id ${socket.id} connected!`);
-    
-    socket.on('disconnect', () => {
-        console.log(`Client ${socket.id} disconnected!`);
-    })
-})
+io.on('connect', socket => {
+	let quizLobby = 'Player Lobby';
+	socket.join(quizLobby);
 
-io.of('/quiz').on('connect', socket => {
+	io.in(quizLobby);
+
+	totalOnlineCount++;
 
 	totalOnlineCount++;g
 	console.log(`totalOnlineCount = ${totalOnlineCount}`);
 
 	if (totalOnlineCount === 1) {
 		player = socket.id;
+		console.log('New player ', socket.id);
+		socket.emit('newPlayer', 'Player 1');
 	} else {
 		spectators.push(socket.id);
-		console.log(`totalOnlineCount = ${totalOnlineCount}`);
-		console.log(`Spectators = ${spectators}`);
-		console.log(`Player = ${player}`);
+		socket.emit('newSpectator', 'Player ' + totalOnlineCount);
+
+		//console.log(`Spectators = ${spectators}`);
+		//console.log(`Player = ${player}`);
 	}
 
 	socket.on('disconnect', () => {
-		console.log(`client${socket.id}`);
+		console.log(`client has left ${socket.id}`);
 
-		if (player === socket.id) {
-			socket.emit('PlayerLeft', 'Player left the game');
+		console.log(socket.id, player);
+		if (socket.id === player) {
+			socket.emit('player', 'Player left the game');
+			player = null;
 			totalOnlineCount--;
-			console.log('Player left', totalOnlineCount);
+			console.log('The main player left', totalOnlineCount);
 		} else {
 			totalOnlineCount--;
 			console.log('Total players:', totalOnlineCount);
