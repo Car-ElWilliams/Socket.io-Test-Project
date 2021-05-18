@@ -46,7 +46,7 @@ io.of('/').on('connect', socket => {
 
 io.of('/quiz').on('connect', socket => {
 
-	totalOnlineCount++;
+	totalOnlineCount++;g
 	console.log(`totalOnlineCount = ${totalOnlineCount}`);
 
 	if (totalOnlineCount === 1) {
