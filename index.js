@@ -10,15 +10,15 @@ const io = require('socket.io')(httpServer);
 
 const { default: axios } = require('axios');
 
-async function getQuiz() {
-	try {
-		const response = await axios.get('https://opentdb.com/api.php?amount=5&type=multiple');
-		console.log(response.data.results);
-		return response.data.results[0].question;
-	} catch (error) {
-		console.error(error.message);
-	}
-}
+// async function getQuiz() {
+// 	try {
+// 		const response = await axios.get('https://opentdb.com/api.php?amount=5&type=multiple');
+// 		console.log(response.data.results);
+// 		return response.data.results[0].question;
+// 	} catch (error) {
+// 		console.error(error.message);
+// 	}
+// }
 
 console.log(getQuiz());
 
@@ -36,10 +36,17 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname + '/public', 'index.html'));
 });
 
-io.on('connect', socket => {
-	console.log(`A client connected with ID: ${socket.id}`);
-	totalOnlineCount++;
+io.of('/').on('connect', socket => {
+    console.log(`A client with id ${socket.id} connected!`);
+    
+    socket.on('disconnect', () => {
+        console.log(`Client ${socket.id} disconnected!`);
+    })
+})
 
+io.of('/quiz').on('connect', socket => {
+
+	totalOnlineCount++;
 	console.log(`totalOnlineCount = ${totalOnlineCount}`);
 
 	if (totalOnlineCount === 1) {
