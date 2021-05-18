@@ -29,6 +29,14 @@ socket.on('newSpectator', spectator => {
 	h1.textContent = 'Question is';
 });
 
+socket.on('startGame', questions => {
+	let ul = document.getElementById('chatQuestion');
+	let li = document.createElement('li');
+	ul.appendChild(li);
+
+	li.textContent = questions;
+})
+
 // socket.on('message', msg => {
 // 	let span = document.querySelector('#player');
 // 	span.textContent = msg;
