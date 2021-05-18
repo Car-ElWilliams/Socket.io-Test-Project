@@ -1,4 +1,4 @@
-let socket = io();
+let socket = io('/quiz');
 
 socket.on('PlayerLeft', msg => {
 	console.log('Player left');
