@@ -6,6 +6,11 @@ socket.on('startGame', quizData => {
 	let quizIncorrectAnswers = quizData.quizIncorrectAnswers;
 	let allOptions = quizData.allOptions;
 
+	question1 = document.querySelector('#myQuestion1').value = allOptions[0];
+	question2 = document.querySelector('#myQuestion2').value = allOptions[1];
+	question3 = document.querySelector('#myQuestion3').value = allOptions[2];
+	question4 = document.querySelector('#myQuestion4').value = allOptions[3];
+
 	console.log(quizQuestion, quizCorrectAnswer, quizIncorrectAnswers, allOptions);
 });
 

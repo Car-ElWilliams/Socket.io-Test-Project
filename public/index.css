@@ -6,19 +6,20 @@
 }
 .chatSpace {
   width: 95%;
-  height: calc(100% - 169px);
+  height: 80%;
   margin-left: auto;
   margin-right: auto;
 }
 #myForm {
   width: auto;
-  height: auto;
-  margin-bottom: 20px;
+  height: 5%;
   border-top: 2px solid black;
   border-radius: 6px;
-  padding-top: 20px;
 }
-#myQuestion {
+#myQuestion1,
+#myQuestion2,
+#myQuestion3,
+#myQuestion4 {
   display: inline-block;
   color: #1ad869;
   font-size: 15px;
@@ -32,7 +33,10 @@
   cursor: pointer;
   margin-right: 20px;
 }
-#myQuestion:hover {
+#myQuestion1:hover,
+#myQuestion2:hover,
+#myQuestion3:hover,
+#myQuestion4:hover {
   background-color: #1ad869;
   color: #fff;
 }
