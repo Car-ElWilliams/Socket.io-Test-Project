@@ -4,11 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>The Quiz</title>
+    <link rel="stylesheet" href="index.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="/client.js"></script>
 </head>
 <body>
-  
+    <!-- Main container of chatlog and buttons -->
+    <div class="container">
+        <h1 id="title" style="text-align: center;">The Quiz</h1>
+        <!-- Container  of chatlog showcase-->
+        <div class="chatSpace">
+            <span>Players in lobby</span>
+            <ul>
+            </ul>
+        </div>
+        <!-- Container of quiz button and submit -->
+        <form id="myForm">
+            <input type="button" name="question" id="myQuestion" value="Question" style="margin-left: 20px;">
+            <input type="button" name="question" id="myQuestion" value="Question">
+            <input type="button" name="question" id="myQuestion" value="Question">
+            <input type="button" name="question" id="myQuestion" value="Question">
+            <input type="submit" value="Submit" id="mySubmit">
+        </form>
+    </div>
 </body>
 </html>

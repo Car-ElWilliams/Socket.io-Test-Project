@@ -36,41 +36,39 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname + '/public', 'index.html'));
 });
 
-io.on('connect', socket => {
+io.of('/quiz').on('connect', socket => {
 	let quizLobby = 'Player Lobby';
 	socket.join(quizLobby);
 
 	io.in(quizLobby);
-
-	totalOnlineCount++;
-
 	console.log(`totalOnlineCount = ${totalOnlineCount}`);
 
-	if (totalOnlineCount === 1) {
-		player = socket.id;
-		console.log('New player ', socket.id);
+	if (totalOnlineCount === 0){
+    totalOnlineCount++
+    player = socket.id
 		socket.emit('newPlayer', 'Player 1');
-	} else {
-		spectators.push(socket.id);
+    console.log(`${socket.id} has been chosen to be as Player!`)
+  }else{
+    totalOnlineCount++
+    spectators.push(socket.id);
 		socket.emit('newSpectator', 'Player ' + totalOnlineCount);
-
-		//console.log(`Spectators = ${spectators}`);
-		//console.log(`Player = ${player}`);
-	}
+    console.log(`${socket.id} has been moved to Spectator. (Reason: Max player is 1)`)
+  }
 
 	socket.on('disconnect', () => {
 		console.log(`client has left ${socket.id}`);
 
-		console.log(socket.id, player);
-		if (socket.id === player) {
-			socket.emit('player', 'Player left the game');
-			player = null;
-			totalOnlineCount--;
-			console.log('The main player left', totalOnlineCount);
-		} else {
-			totalOnlineCount--;
-			console.log('Total players:', totalOnlineCount);
-		}
+    if (player === socket.id){
+      console.log(`Player ${socket.id} has left the lobby!`)
+      player = null
+      totalOnlineCount--
+    }else{
+      console.log(`A user ${socket.id} has left the lobby!`)
+      spectators = spectators.filter(e => e !== socket.id);
+        // console.log(spectators) Check array if successful remove correct socket.id
+      totalOnlineCount--
+    }
+
 	});
 });
 
