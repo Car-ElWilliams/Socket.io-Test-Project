@@ -1,31 +1,27 @@
 let socket = io('/quiz');
 
+socket.on('startGame', quizData => {
+	let quizQuestion = quizData.quizQuestion;
+	let quizCorrectAnswer = quizData.quizCorrectAnswer;
+	let quizIncorrectAnswers = quizData.quizIncorrectAnswers;
+	let allOptions = quizData.allOptions;
+
+	console.log(quizQuestion, quizCorrectAnswer, quizIncorrectAnswers, allOptions);
+});
+
 socket.on('PlayerLeft', msg => {
 	console.log('Player left');
-	console.log('Client says hello there)', msg)
+	console.log('Client says hello there)', msg);
 });
+
 socket.on('newPlayer', player1 => {
-	//Creates a list element of the first player
-	let ul = document.querySelector('ul');
-	let li = document.createElement('li');
-	ul.appendChild(li);
-
-	li.textContent = player1;
-
-	let h1 = document.querySelector('h1');
-	h1.textContent = 'You are ' + player1;
+	let h1 = document.querySelector('h2');
+	h1.textContent = 'Question:';
 });
 
 socket.on('newSpectator', spectator => {
-	//Creates a list element of spectators
-	let ul = document.querySelector('ul');
-	let li = document.createElement('li');
-	ul.appendChild(li);
-
-	li.textContent = spectator;
-
-	let h1 = document.querySelector('h1');
-	h1.textContent = 'You are ' + spectator;
+	let h1 = document.querySelector('h2');
+	h1.textContent = 'Question is';
 });
 
 socket.on('startGame', questions => {
