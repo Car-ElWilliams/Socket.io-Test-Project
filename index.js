@@ -16,18 +16,25 @@ async function getQuiz(round) {
 	let quizQuestion = '';
 	let quizIncorrectAnswers = [];
 	let quizCorrectAnswer = [];
-	let allOptions;
+	let allOptions = [];
 
 	try {
-		const response = await axios.get('https://opentdb.com/api.php?amount=5&type=multiple');
+		const response = await axios.get(
+			'https://opentdb.com/api.php?encode=url3986&amount=5&type=multiple',
+			{
+				params: { encode: 'url3986' },
+			}
+		);
 		//console.log(response.data.results[rounds]);
 
 		// Quiz question, answer and incorrect answers
-		quizQuestion = response.data.results[rounds].question;
-		quizCorrectAnswer = response.data.results[rounds].correct_answer;
-		quizIncorrectAnswers = response.data.results[rounds].incorrect_answers;
+		quizQuestion = decodeURIComponent(response.data.results[rounds].question);
+		quizCorrectAnswer = decodeURIComponent(response.data.results[rounds].correct_answer);
+		quizIncorrectAnswers = decodeURIComponent(response.data.results[rounds].incorrect_answers);
 
-		allOptions = quizIncorrectAnswers.concat(quizCorrectAnswer);
+		allOptions.push(quizIncorrectAnswers.split(','), quizCorrectAnswer);
+		let flattenAllOptions = allOptions.flat();
+		allOptions = flattenAllOptions;
 
 		//console.log(
 		//	'Question is:',
@@ -94,7 +101,7 @@ io.of('/quiz').on('connect', async socket => {
 		if (player === socket.id) {
 			console.log(`Player ${socket.id} has left the lobby!`);
 			// testing emit to send everyone about game end when Player left
-			// socket.emit('playerLeft') 
+			// socket.emit('playerLeft')
 			player = null;
 			totalOnlineCount--;
 		} else {

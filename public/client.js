@@ -1,17 +1,31 @@
-  
 let socket = io('/quiz');
-const chatspace = document.getElementsByClassName('chatSpace')
-let currentRound = 0;
+const chatspace = document.getElementsByClassName('chatSpace');
 
-function nextQuestion() {
-	currentRound++;
-	socket.emit('newQuestion', currentRound);
-	console.log('current round', currentRound);
+let currentRound = 0;
+let correctAnswer;
+
+function nextQuestion(e) {
+	if (e.value === correctAnswer) {
+		setTimeout(() => {
+			currentRound++;
+			socket.emit('newQuestion', currentRound);
+			console.log('current round', currentRound);
+			document.querySelector('h3 span').textContent = '';
+		}, 3000);
+
+		document.querySelector('h3 span').textContent = 'Correct answer is ' + correctAnswer;
+	}
 
 	//return currentRound;
 	// for(let quizLoop = 0; quizLoop <= 4; quizLoop++) {
 	// 	socket.emit('newQuestion', allAnswers[quizLoop]);
 	// }
+}
+
+function showCorrectAnswer() {
+	if (nextQuestion('showAnswer') === correctAnswer) {
+		console.log('hello');
+	}
 }
 
 socket.on('startGame', quizData => {
@@ -27,31 +41,9 @@ socket.on('startGame', quizData => {
 	question3 = document.querySelector('#myQuestion3').value = allOptions[2];
 	question4 = document.querySelector('#myQuestion4').value = allOptions[3];
 
-	// Define and replace if missing like ", ', 's and more depens what missing
-	if (quizQuestion.includes('&quot;') === true & (quizQuestion.includes('&#039;s') === true)){
-		headQuiz2 = quizQuestion.replaceAll('&#039;s', "'s")
-		headQuiz = headQuiz2.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&quot;') === true){
-		headQuiz = quizQuestion.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&#039') === true){
-		headQuiz = quizQuestion.replaceAll('&#039;', "'");
-	}
-	else if (quizQuestion.includes('&shy;') === true){
-		headQuiz = quizQuestion.replaceAll('&shy;', "-")
-	}
-	else if (quizQuestion.includes('&#039;s')){
-		headQuiz = quizQuestion.replaceAll('&#039;s', "'s")
-	}
-	else if (quizQuestion.includes('&deg;') === true){
-		headQuiz = quizQuestion.replaceAll('&deg;', "°")
-	}
-	else {
-		headQuiz = quizQuestion
-	}
+	mainQuestion = document.querySelector('h2').textContent = quizData.quizQuestion;
 
-	document.querySelector('h3').textContent = headQuiz;
+	correctAnswer = quizData.quizCorrectAnswer;
 });
 
 socket.on('newQuestionFromServer', quizData => {
@@ -66,32 +58,10 @@ socket.on('newQuestionFromServer', quizData => {
 	question2 = document.querySelector('#myQuestion2').value = allOptions[1];
 	question3 = document.querySelector('#myQuestion3').value = allOptions[2];
 	question4 = document.querySelector('#myQuestion4').value = allOptions[3];
-	
-	// Define and replace if missing like ", ', 's and more depens what missing
-	if (quizQuestion.includes('&quot;') === true & (quizQuestion.includes('&#039;s') === true)){
-		headQuiz2 = quizQuestion.replaceAll('&#039;s', "'s")
-		headQuiz = headQuiz2.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&quot;') === true){
-		headQuiz = quizQuestion.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&#039') === true){
-		headQuiz = quizQuestion.replaceAll('&#039;', "'");
-	}
-	else if (quizQuestion.includes('&shy;') === true){
-		headQuiz = quizQuestion.replaceAll('&shy;', "-")
-	}
-	else if (quizQuestion.includes('&#039;s')){
-		headQuiz = quizQuestion.replaceAll('&#039;s', "'s")
-	}
-	else if (quizQuestion.includes('&deg;') === true){
-		headQuiz = quizQuestion.replaceAll('&deg;', "°")
-	}
-	else {
-		headQuiz = quizQuestion
-	}
 
-	document.querySelector('h3').textContent = headQuiz;
+	mainQuestion = document.querySelector('h2').textContent = quizData.quizQuestion;
+
+	correctAnswer = quizData.quizCorrectAnswer;
 });
 
 socket.on('PlayerLeft', msg => {
@@ -110,14 +80,14 @@ socket.on('newSpectator', spectator => {
 });
 
 // Testing of when Player left, issue is when it doesn't show for all spectators
-socket.on('playerLeft', () =>  {
-	GameEnd = `The game as ended!`
-	const reason = document.createElement("h4");
-	reason.style.display = "block";
-	reason.innerHTML = "Player has left the lobby :C"
-	chatspace.appendChild(reason)
+socket.on('playerLeft', () => {
+	GameEnd = `The game as ended!`;
+	const reason = document.createElement('h4');
+	reason.style.display = 'block';
+	reason.innerHTML = 'Player has left the lobby :C';
+	chatspace.appendChild(reason);
 	document.querySelector('h3').textContent = GameEnd;
-}) 
+});
 
 //socket.on('startGame', questions => {
 //	let ul = document.getElementById('chatQuestion');
