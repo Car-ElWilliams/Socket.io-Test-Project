@@ -62,6 +62,7 @@ function shuffleArray(allOptions) {
         allOptions[i] = allOptions[j];
         allOptions[j] = temp;
     }
+	console.log(allOptions);
 }
 //Variables
 
