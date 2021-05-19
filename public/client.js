@@ -10,10 +10,18 @@ function nextQuestion(e) {
 			currentRound++;
 			socket.emit('newQuestion', currentRound);
 			console.log('current round', currentRound);
-			document.querySelector('h3 span').textContent = '';
 		}, 3000);
 
-		document.querySelector('h3 span').textContent = 'Correct answer is ' + correctAnswer;
+		document.querySelector('h3 span').textContent = 'Your answer was correct!';
+		document.querySelector('h3 span').style.color = 'green';
+	} else {
+		document.querySelector('h3 span').textContent = 'Incorrect! Right answer is ' + correctAnswer;
+		document.querySelector('h3 span').style.color = 'red';
+		setTimeout(() => {
+			currentRound++;
+			socket.emit('newQuestion', currentRound);
+			console.log('current round', currentRound);
+		}, 3000);
 	}
 
 	//return currentRound;
@@ -59,6 +67,7 @@ socket.on('newQuestionFromServer', quizData => {
 
 	console.log(quizQuestion, quizCorrectAnswer, quizIncorrectAnswers, allOptions);
 
+	//All four answers
 	answer1 = document.querySelector('#myAnswer1').value = allOptions[0];
 	answer2 = document.querySelector('#myAnswer2').value = allOptions[1];
 	answer3 = document.querySelector('#myAnswer3').value = allOptions[2];
@@ -91,10 +100,9 @@ socket.on('newQuestionFromServer', quizData => {
 	let h3 = document.createElement('h3');
 	h3.innerHTML = headQuiz;
 	document.getElementById('questionContainer').appendChild(h3);
-	question1 = document.querySelector('#myQuestion1').value = allOptions[0];
-	question2 = document.querySelector('#myQuestion2').value = allOptions[1];
-	question3 = document.querySelector('#myQuestion3').value = allOptions[2];
-	question4 = document.querySelector('#myQuestion4').value = allOptions[3];
+
+	//Reset answer
+	document.querySelector('h3 span').textContent = '';
 
 	mainQuestion = document.querySelector('h2').textContent = quizData.quizQuestion;
 
