@@ -36,6 +36,7 @@ async function getQuiz(round) {
 		let flattenAllOptions = allOptions.flat();
 		allOptions = flattenAllOptions;
 
+		shuffleArray(allOptions);
 		//console.log(
 		//	'Question is:',
 		//	quizQuestion,
@@ -53,6 +54,15 @@ async function getQuiz(round) {
 	}
 }
 
+//Shuffle the order of the array
+function shuffleArray(allOptions) {
+    for (let i = allOptions.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = allOptions[i];
+        allOptions[i] = allOptions[j];
+        allOptions[j] = temp;
+    }
+}
 //Variables
 
 let totalOnlineCount = 0;
