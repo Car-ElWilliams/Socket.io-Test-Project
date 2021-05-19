@@ -93,8 +93,8 @@ io.of('/quiz').on('connect', async socket => {
 
 		if (player === socket.id) {
 			console.log(`Player ${socket.id} has left the lobby!`);
-
-			socket.emit('playerLeft')
+			// testing emit to send everyone about game end when Player left
+			// socket.emit('playerLeft') 
 			player = null;
 			totalOnlineCount--;
 		} else {

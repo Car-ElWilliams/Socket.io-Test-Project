@@ -109,7 +109,7 @@ socket.on('newSpectator', spectator => {
 	h1.textContent = 'Question is';
 });
 
-
+// Testing of when Player left, issue is when it doesn't show for all spectators
 socket.on('playerLeft', () =>  {
 	GameEnd = `The game as ended!`
 	const reason = document.createElement("h4");
