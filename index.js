@@ -115,17 +115,26 @@ io.of('/quiz').on('connect', async socket => {
 			let resultQuest = [quizQuestion, answer, true];
 			io.of('/quiz').in('Spectator').emit('Resulting', resultQuest);
 
-			currentRound++;
 			console.log(currentRound);
-			socket.emit('startGame', await getQuiz(currentRound));
+			if (currentRound === 4) {
+				socket.disconnect();
+			} else {
+				currentRound++;
+				console.log(currentRound);
+				socket.emit('startGame', await getQuiz(currentRound));
+			}
 
 			// Else if wrong...
 		} else {
 			let resultQuest = [quizQuestion, answer, false];
 			io.of('/quiz').in('Spectator').emit('Resulting', resultQuest);
-
-			currentRound++;
-			socket.emit('startGame', await getQuiz(currentRound));
+			console.log(currentRound);
+			if (currentRound === 4) {
+				socket.disconnect();
+			} else {
+				currentRound++;
+				socket.emit('startGame', await getQuiz(currentRound));
+			}
 		}
 	});
 
@@ -136,7 +145,8 @@ io.of('/quiz').on('connect', async socket => {
 	});
 
 	// When client disconnect
-	socket.on('disconnect', () => {
+	socket.on('disconnect', socket => {
+		console.log(socket.id);
 		console.log(`client has left ${socket.id}`);
 
 		// If choosen player left the lobby
