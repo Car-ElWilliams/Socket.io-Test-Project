@@ -30,9 +30,9 @@ socket.on('Resulting', resultQuest => {
 		div.class = 'Resulting';
 
 		// Adding string to element
-		resultAnswer = resultQuest[1] + '(Correct!)';
+		resultAnswer = ' ' + resultQuest[1] + ' (Correct!)';
 		spanHead.innerHTML = resultQuest[0];
-		spanAnswer.innerHTML = resultAnswer;
+		spanAnswer.innerHTML = resultAnswer.bold();
 
 		// Appendchild together creation of div
 		log.appendChild(div);
@@ -46,9 +46,9 @@ socket.on('Resulting', resultQuest => {
 		div.class = 'Resulting';
 
 		// Adding string to element
-		resultAnswer = resultQuest[1] + '(Wrong!)';
+		resultAnswer = ' ' + resultQuest[1] + ' (Wrong!)';
 		spanHead.innerHTML = resultQuest[0];
-		spanAnswer.innerHTML = resultAnswer;
+		spanAnswer.innerHTML = resultAnswer.bold();
 
 		// Appendchild together creation of div
 		log.appendChild(div);
