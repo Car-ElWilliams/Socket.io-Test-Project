@@ -47,6 +47,11 @@
   background-color: #1ad869;
   color: #fff;
 }
+
+#spectatorLog {
+  text-align: center;
+}
+
 /* #mySubmit {
   display: inline-block;
   color: #ff4c4c;

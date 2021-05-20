@@ -1,40 +1,90 @@
 let socket = io('/quiz');
-const log = document.getElementById('questLog');
+const log = document.getElementById('spectatorLog');
+const headlog = document.getElementById('spectatorHeader')
 
-let currentRound = 0;
+
 let correctAnswer;
 
-function nextQuestion(e) {
-	if (e === correctAnswer) {
-		setTimeout(() => {
-			currentRound++;
-			socket.emit('newQuestion', currentRound);
-			console.log('current round', currentRound);
-		}, 3000);
 
-		document.querySelector('h3 span').textContent = 'Your answer was correct!';
-		document.querySelector('h3 span').style.color = 'green';
-	} else {
-		document.querySelector('h3 span').textContent = 'Incorrect! Right answer is ' + correctAnswer;
-		document.querySelector('h3 span').style.color = 'red';
-		setTimeout(() => {
-			currentRound++;
-			socket.emit('newQuestion', currentRound);
-			console.log('current round', currentRound);
-		}, 3000);
-	}
+// function nextQuestion(e) {
+// 	if (e === correctAnswer) {
+// 		setTimeout(() => {
+// 			currentRound++;
+// 			socket.emit('newQuestion', currentRound);
+// 			console.log('current round', currentRound);
+// 		}, 3000);
+
+// 		document.querySelector('h3 span').textContent = 'Your answer was correct!';
+// 		document.querySelector('h3 span').style.color = 'green';
+// 	} else {
+// 		document.querySelector('h3 span').textContent = 'Incorrect! Right answer is ' + correctAnswer;
+// 		document.querySelector('h3 span').style.color = 'red';
+// 		setTimeout(() => {
+// 			currentRound++;
+// 			socket.emit('newQuestion', currentRound);
+// 			console.log('current round', currentRound);
+// 		}, 3000);
+// 	}
 
 	//return currentRound;
 	// for(let quizLoop = 0; quizLoop <= 4; quizLoop++) {
 	// 	socket.emit('newQuestion', allAnswers[quizLoop]);
 	// }
-}
 
-function showCorrectAnswer() {
-	if (nextQuestion('showAnswer') === correctAnswer) {
-		console.log('hello');
-	}
+
+// function showCorrectAnswer() {
+// 	if (nextQuestion('showAnswer') === correctAnswer) {
+// 		console.log('hello');
+// 	}
+// }
+
+
+
+// Function to send back value to server
+function nextQuestion(answer) {
+	socket.emit('AnswerRespond', answer.value)
 }
+// Resulting to answer correct or wrong to spectator
+socket.on('Resulting', resultQuest => {
+
+		if (resultQuest[2] === true){
+			
+			// Create element and add class
+			let div = document.createElement('div')
+			let spanHead = document.createElement('span')
+			let spanAnswer = document.createElement('span')
+			div.class = 'Resulting';
+
+			// Adding string to element
+			resultAnswer = resultQuest[1] + '(Correct!)'
+			spanHead.innerHTML = resultQuest[0];
+			spanAnswer.innerHTML = resultAnswer
+
+			// Appendchild together creation of div
+			log.appendChild(div)
+			div.appendChild(spanHead)
+			div.appendChild(spanAnswer)
+			
+		}else{
+
+			// Create element and add class
+			let div = document.createElement('div')
+			let spanHead = document.createElement('span')
+			let spanAnswer = document.createElement('span')
+			div.class = 'Resulting';
+
+			// Adding string to element
+			resultAnswer = resultQuest[1] + '(Wrong!)'
+			spanHead.innerHTML = resultQuest[0];
+			spanAnswer.innerHTML = resultAnswer
+
+			// Appendchild together creation of div
+			log.appendChild(div)
+			div.appendChild(spanHead)
+			div.appendChild(spanAnswer)
+		}
+})
+
 
 socket.on('startGame', quizData => {
 	let quizQuestion = quizData.quizQuestion;
@@ -121,33 +171,49 @@ socket.on('newPlayer', player1 => {
 });
 
 socket.on('newSpectator', spectator => {
+	// Create elements
 	let h2 = document.createElement('h2');
 	let span = document.createElement('span');
-	h2.innerHTML = 'Spectator';
-	span.innerHTML = 'You are spectator reason max player is 1.'
+	let resultQuest = document.createElement('div');
 
+	// Add id for them to use replace string later on
+	resultQuest.id = 'resultQuest';
+	h2.id = 'SpecHead';
+	span.id = 'SpecSpan';
+
+	// Add string contain in element
+	h2.innerHTML = 'You are a Spectator';
+	span.innerHTML = 'You join spectator automatic for a reason max player is 1.'
+
+	// Due button is already loaded in html, remove them.
 	ButtonForm = document.getElementById('myForm')
-	ButtonForm.style.display = 'none';
+	ButtonForm.remove();
 
-	document.getElementById('questionContainer').appendChild(h2);
-	document.getElementById('questionContainer').appendChild(span);
+	// appendChild together to div with id spectatorHeader already in HTML
+	spectatorHeader.appendChild(h2);
+	spectatorHeader.appendChild(span);
+	// log.appendChild(resultQuest)
 });
 
-
+// Progress to send span spectators view of quest and player's answer
 socket.on('LogSpectator', spectator => {
 	
 
 	PlayerAnswer = quizData
 
-
 })
 
-// Testing of when Player left, issue is when it doesn't show for all spectators
-socket.on('playerLeft', () => {
-	let GameEnd = 'The Game as Ended! Player left.'
-	document.querySelector
+// TWhen player left the lobby, send message to every active clients that game ended.
+socket.on('playerLeft', spectator => {
+	let GameEnd = document.createElement('h3')
+	document.getElementById('SpecHead').innerHTML = 'The game as ended!'
+	document.getElementById('SpecSpan').innerHTML = 'Game ended because player left the game!'
+	GameEnd.innerHTML = 'Player has left the lobby.'
+	log.appendChild(GameEnd)
 	console.log("Player Left! Game End!")
 });
+
+
 
 //socket.on('startGame', questions => {
 //	let ul = document.getElementById('chatQuestion');

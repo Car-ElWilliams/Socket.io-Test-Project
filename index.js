@@ -9,13 +9,22 @@ const httpServer = http.createServer(app);
 const io = require('socket.io')(httpServer);
 
 const { default: axios } = require('axios');
+const { resourceUsage } = require('process');
 
+//Variables
+let player = null;
+let spectators = [];
+let quizCorrectAnswer = [];
+let quizQuestion = '';
+let currentRound = 0;
+
+// Async fuction to axios.get the quiz
 async function getQuiz(round) {
 	let rounds = round;
 
-	let quizQuestion = '';
+	// let quizQuestion = '';
 	let quizIncorrectAnswers = [];
-	let quizCorrectAnswer = [];
+	// let quizCorrectAnswer = [];
 	let allOptions = [];
 
 	try {
@@ -64,66 +73,85 @@ function shuffleArray(allOptions) {
     }
 	console.log(allOptions);
 }
-//Variables
-
-let totalOnlineCount = 0;
-let player = null;
-let spectators = [];
 
 // Express
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname + '/public', 'index.html'));
 });
 
+// Socket io with by clients connect to side /quiz
 io.of('/quiz').on('connect', async socket => {
 	let quizLobby = 'Player Lobby';
 	socket.join(quizLobby);
 
 	io.in(quizLobby);
-	console.log(`totalOnlineCount = ${totalOnlineCount}`);
 
-	if (totalOnlineCount === 0) {
-		totalOnlineCount++;
+	// Check if there is no client online, who ever enter first will be choosen as player
+	if (player === null) {
+		// Set clients id as player to remember send the right one
 		player = socket.id;
 		socket.emit('newPlayer', 'Player 1');
 		console.log(`${socket.id} has been chosen to be as Player!`);
-
 		console.log('On start game send: ', await getQuiz(0));
-
 		socket.emit('startGame', await getQuiz(0));
-	} else {
-		totalOnlineCount++;
+	}
+	// Else the rest late join will move to spectator. 
+	else {
+		// Move client to room as Spectator and emit it to see spectator view
 		spectators.push(socket.id);
-
 		let SpectatorRoom = 'Spectator';
     socket.join(SpectatorRoom);
 
-		socket.emit('newSpectator', 'Player ' + totalOnlineCount);
+		socket.emit('newSpectator');
 		console.log(`${socket.id} has been moved to Spectator. (Reason: Max player is 1)`);
 	}
-	
+
+	// Respond and check if answer was correct, then send emit to update spectator view of resulting.
+	socket.on('AnswerRespond', answer => {
+		console.log(answer)
+		console.log(quizCorrectAnswer)
+		// If answer is correct!
+		if (answer === quizCorrectAnswer) {
+			let resultQuest = [quizQuestion, answer, true]
+			io.of('/quiz').in('Spectator').emit('Resulting', resultQuest)
+
+			currentRound++;
+			socket.emit('newQuestion', currentRound);
+
+		// Else if wrong...
+		} else {
+			
+			let resultQuest = [quizQuestion, answer, false]
+			io.of('/quiz').in('Spectator').emit('Resulting', resultQuest)
+
+			currentRound++;
+			socket.emit('newQuestion', currentRound);
+		}
+	});
+
+	// Send new quiz
 	socket.on('newQuestion', async round => {
 		console.log(round);
 		socket.emit('newQuestionFromServer', await getQuiz(round));
 	});
 
+	// When client disconnect
 	socket.on('disconnect', () => {
 		console.log(`client has left ${socket.id}`);
 
+		// If choosen player left the lobby
 		if (player === socket.id) {
 			console.log(`Player ${socket.id} has left the lobby!`);
-			// testing emit to send everyone about game end when Player left
-			io.to('Spectator').emit('playerLeft');
+			io.of('/quiz').in('Spectator').emit('playerLeft');
+			// Reset and who come first will be new choosen player
 			player = null;
-			totalOnlineCount = 0;
+		
+		// Else as if NOT player but as spectator
 		} else {
 			console.log(`A user ${socket.id} has left the lobby!`);
 			spectators = spectators.filter(e => e !== socket.id);
-			// console.log(spectators) Check array if successful remove correct socket.id
-			totalOnlineCount--;
 		}
 	});
 });
