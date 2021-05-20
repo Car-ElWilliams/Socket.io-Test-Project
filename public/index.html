@@ -14,21 +14,23 @@
 <body>
     <!-- Main container of chatlog and buttons -->
     <div class="container">
-        <h1 id="title" style="text-align: center;">The Quiz</h1>
-        <h2></h2>
-        <h3></h3>
-        <!-- Container  of chatlog showcase-->
-        <div class="chatSpace">
+        <div id="questionContainer">
+            <h1 id="title" style="text-align: center;">The Quiz</h1><br>
+            <!-- <h2></h2>
+            <h3></h3> -->
+        </div>
+
+        <div id="questLog">
 
         </div>
+
         <!-- Container of quiz button and submit -->
         <form id="myForm">
-            <input type="button" name="question" id="myQuestion1" value="Question" onClick="nextQuestion()"
+            <input type="button" name="Answer" id="myAnswer1" value="Answer 1" onClick="nextQuestion()"
                 style="margin-left: 20px;">
-            <input type="button" name="question" id="myQuestion2" value="Question" onClick="nextQuestion()">
-            <input type="button" name="question" id="myQuestion3" value="Question" onClick="nextQuestion()">
-            <input type="button" name="question" id="myQuestion4" value="Question" onClick="nextQuestion()">
-            <!--<input type="submit" value="Submit" id="mySubmit">-->
+            <input type="button" name="Answer" id="myAnswer2" value="Answer 2" onClick="nextQuestion()">
+            <input type="button" name="Answer" id="myAnswer3" value="Answer 3" onClick="nextQuestion()">
+            <input type="button" name="Answer" id="myAnswer4" value="Answer 4" onClick="nextQuestion()">
         </form>
     </div>
 </body>

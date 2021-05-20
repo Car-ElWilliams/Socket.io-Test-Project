@@ -16,21 +16,27 @@ async function getQuiz(round) {
 	let quizQuestion = '';
 	let quizIncorrectAnswers = [];
 	let quizCorrectAnswer = [];
-	let allOptions;
+	let allOptions = [];
 
 	try {
-		const response = await axios.get('https://opentdb.com/api.php?amount=5&type=multiple',{
-  	params: { encode: 'url3986' }
-	});
+		const response = await axios.get(
+			'https://opentdb.com/api.php?encode=url3986&amount=5&type=multiple',
+			{
+				params: { encode: 'url3986' },
+			}
+		);
 		//console.log(response.data.results[rounds]);
 
 		// Quiz question, answer and incorrect answers
-		quizQuestion = decodeURIComponent(htmlresponse.data.results[rounds].question);
+		quizQuestion = decodeURIComponent(response.data.results[rounds].question);
 		quizCorrectAnswer = decodeURIComponent(response.data.results[rounds].correct_answer);
 		quizIncorrectAnswers = decodeURIComponent(response.data.results[rounds].incorrect_answers);
 
-		allOptions = quizIncorrectAnswers.concat(quizCorrectAnswer);
+		allOptions.push(quizIncorrectAnswers.split(','), quizCorrectAnswer);
+		let flattenAllOptions = allOptions.flat();
+		allOptions = flattenAllOptions;
 
+		shuffleArray(allOptions);
 		//console.log(
 		//	'Question is:',
 		//	quizQuestion,
@@ -48,6 +54,16 @@ async function getQuiz(round) {
 	}
 }
 
+//Shuffle the order of the array
+function shuffleArray(allOptions) {
+    for (let i = allOptions.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = allOptions[i];
+        allOptions[i] = allOptions[j];
+        allOptions[j] = temp;
+    }
+	console.log(allOptions);
+}
 //Variables
 
 let totalOnlineCount = 0;
@@ -81,10 +97,14 @@ io.of('/quiz').on('connect', async socket => {
 	} else {
 		totalOnlineCount++;
 		spectators.push(socket.id);
+
+		let SpectatorRoom = 'Spectator';
+    socket.join(SpectatorRoom);
+
 		socket.emit('newSpectator', 'Player ' + totalOnlineCount);
 		console.log(`${socket.id} has been moved to Spectator. (Reason: Max player is 1)`);
 	}
-
+	
 	socket.on('newQuestion', async round => {
 		console.log(round);
 		socket.emit('newQuestionFromServer', await getQuiz(round));
@@ -96,9 +116,9 @@ io.of('/quiz').on('connect', async socket => {
 		if (player === socket.id) {
 			console.log(`Player ${socket.id} has left the lobby!`);
 			// testing emit to send everyone about game end when Player left
-			// socket.emit('playerLeft') 
+			io.to('Spectator').emit('playerLeft');
 			player = null;
-			totalOnlineCount--;
+			totalOnlineCount = 0;
 		} else {
 			console.log(`A user ${socket.id} has left the lobby!`);
 			spectators = spectators.filter(e => e !== socket.id);
