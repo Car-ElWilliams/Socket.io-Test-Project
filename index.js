@@ -19,13 +19,15 @@ async function getQuiz(round) {
 	let allOptions;
 
 	try {
-		const response = await axios.get('https://opentdb.com/api.php?amount=5&type=multiple');
+		const response = await axios.get('https://opentdb.com/api.php?amount=5&type=multiple',{
+  	params: { encode: 'url3986' }
+	});
 		//console.log(response.data.results[rounds]);
 
 		// Quiz question, answer and incorrect answers
-		quizQuestion = response.data.results[rounds].question;
-		quizCorrectAnswer = response.data.results[rounds].correct_answer;
-		quizIncorrectAnswers = response.data.results[rounds].incorrect_answers;
+		quizQuestion = decodeURIComponent(htmlresponse.data.results[rounds].question);
+		quizCorrectAnswer = decodeURIComponent(response.data.results[rounds].correct_answer);
+		quizIncorrectAnswers = decodeURIComponent(response.data.results[rounds].incorrect_answers);
 
 		allOptions = quizIncorrectAnswers.concat(quizCorrectAnswer);
 

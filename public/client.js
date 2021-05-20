@@ -28,30 +28,30 @@ socket.on('startGame', quizData => {
 	question4 = document.querySelector('#myQuestion4').value = allOptions[3];
 
 	// Define and replace if missing like ", ', 's and more depens what missing
-	if (quizQuestion.includes('&quot;') === true & (quizQuestion.includes('&#039;s') === true)){
-		headQuiz2 = quizQuestion.replaceAll('&#039;s', "'s")
-		headQuiz = headQuiz2.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&quot;') === true){
-		headQuiz = quizQuestion.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&#039') === true){
-		headQuiz = quizQuestion.replaceAll('&#039;', "'");
-	}
-	else if (quizQuestion.includes('&shy;') === true){
-		headQuiz = quizQuestion.replaceAll('&shy;', "-")
-	}
-	else if (quizQuestion.includes('&#039;s')){
-		headQuiz = quizQuestion.replaceAll('&#039;s', "'s")
-	}
-	else if (quizQuestion.includes('&deg;') === true){
-		headQuiz = quizQuestion.replaceAll('&deg;', "°")
-	}
-	else {
-		headQuiz = quizQuestion
-	}
+	// if (quizQuestion.includes('&quot;') === true & (quizQuestion.includes('&#039;s') === true)){
+	// 	headQuiz2 = quizQuestion.replaceAll('&#039;s', "'s")
+	// 	headQuiz = headQuiz2.replaceAll('&quot;', '"');
+	// }
+	// else if (quizQuestion.includes('&quot;') === true){
+	// 	headQuiz = quizQuestion.replaceAll('&quot;', '"');
+	// }
+	// else if (quizQuestion.includes('&#039') === true){
+	// 	headQuiz = quizQuestion.replaceAll('&#039;', "'");
+	// }
+	// else if (quizQuestion.includes('&shy;') === true){
+	// 	headQuiz = quizQuestion.replaceAll('&shy;', "-")
+	// }
+	// else if (quizQuestion.includes('&#039;s')){
+	// 	headQuiz = quizQuestion.replaceAll('&#039;s', "'s")
+	// }
+	// else if (quizQuestion.includes('&deg;') === true){
+	// 	headQuiz = quizQuestion.replaceAll('&deg;', "°")
+	// }
+	// else {
+	// 	headQuiz = quizQuestion
+	// }
 
-	document.querySelector('h3').textContent = headQuiz;
+	document.querySelector('h3').textContent = quizQuestion;
 });
 
 socket.on('newQuestionFromServer', quizData => {
@@ -68,30 +68,30 @@ socket.on('newQuestionFromServer', quizData => {
 	question4 = document.querySelector('#myQuestion4').value = allOptions[3];
 	
 	// Define and replace if missing like ", ', 's and more depens what missing
-	if (quizQuestion.includes('&quot;') === true & (quizQuestion.includes('&#039;s') === true)){
-		headQuiz2 = quizQuestion.replaceAll('&#039;s', "'s")
-		headQuiz = headQuiz2.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&quot;') === true){
-		headQuiz = quizQuestion.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&#039') === true){
-		headQuiz = quizQuestion.replaceAll('&#039;', "'");
-	}
-	else if (quizQuestion.includes('&shy;') === true){
-		headQuiz = quizQuestion.replaceAll('&shy;', "-")
-	}
-	else if (quizQuestion.includes('&#039;s')){
-		headQuiz = quizQuestion.replaceAll('&#039;s', "'s")
-	}
-	else if (quizQuestion.includes('&deg;') === true){
-		headQuiz = quizQuestion.replaceAll('&deg;', "°")
-	}
-	else {
-		headQuiz = quizQuestion
-	}
+	// if (quizQuestion.includes('&quot;') === true & (quizQuestion.includes('&#039;s') === true)){
+	// 	headQuiz2 = quizQuestion.replaceAll('&#039;s', "'s")
+	// 	headQuiz = headQuiz2.replaceAll('&quot;', '"');
+	// }
+	// else if (quizQuestion.includes('&quot;') === true){
+	// 	headQuiz = quizQuestion.replaceAll('&quot;', '"');
+	// }
+	// else if (quizQuestion.includes('&#039') === true){
+	// 	headQuiz = quizQuestion.replaceAll('&#039;', "'");
+	// }
+	// else if (quizQuestion.includes('&shy;') === true){
+	// 	headQuiz = quizQuestion.replaceAll('&shy;', "-")
+	// }
+	// else if (quizQuestion.includes('&#039;s')){
+	// 	headQuiz = quizQuestion.replaceAll('&#039;s', "'s")
+	// }
+	// else if (quizQuestion.includes('&deg;') === true){
+	// 	headQuiz = quizQuestion.replaceAll('&deg;', "°")
+	// }
+	// else {
+	// 	headQuiz = quizQuestion
+	// }
 
-	document.querySelector('h3').textContent = headQuiz;
+	document.querySelector('h3').textContent = quizQuestion;
 });
 
 socket.on('PlayerLeft', msg => {
