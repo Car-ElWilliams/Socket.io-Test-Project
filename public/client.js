@@ -98,7 +98,7 @@ socket.on('newSpectator', spectator => {
 socket.on('GameComplete', result => {
 	log.remove
 	headlog.remove
-	ButtonForm.remove
+	ButtonForm.remove();
 
 	End = document.getElementById('headerAll').textContent = 'Player has finish the question!'
 	let h4 = document.createElement('h4')
