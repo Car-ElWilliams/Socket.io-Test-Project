@@ -71,16 +71,16 @@ app.get('/', (req, res) => {
 
 // Socket io with by clients connect to side /quiz
 io.of('/quiz').on('connect', async socket => {
-	let quizLobby = 'Player Lobby';
-	socket.join(quizLobby);
+	//let quizLobby = 'Player Lobby';
+	//socket.join(quizLobby);
 
-	io.in(quizLobby);
+	//io.in(quizLobby);
 
 	// Check if there is no client online, who ever enter first will be choosen as player
 	if (player === null) {
 		// Set clients id as player to remember send the right one
 		player = socket.id;
-		console.log(player)
+		console.log(player);
 
 		socket.emit('newPlayer', 'Player 1');
 		console.log(`${socket.id} has been chosen to be as Player!`);
@@ -101,34 +101,31 @@ io.of('/quiz').on('connect', async socket => {
 
 	// Respond and check if answer was correct, then send emit to update spectator view of resulting.
 	socket.on('AnswerRespond', async answer => {
-		console.log(player)
+		console.log(player);
 		console.log(answer);
 		console.log(quizCorrectAnswer);
-
 
 		// If answer is correct!
 		if (answer === quizCorrectAnswer) {
 			let resultQuest = [quizQuestion, answer, true];
-			correctTotal++
+			correctTotal++;
 			io.of('/quiz').in('Spectator').emit('Resulting', resultQuest);
 
 			// Check if round amout is max
 			// If max, stop the game and give result how many points player got.
 			// Else, then keep 1up round and keep going until rounds is max
 			if (currentRound === 4) {
+				currentRound++;
+				let pointsResult = [correctTotal, currentRound];
+				socket.emit('GameComplete', pointsResult);
 
-				currentRound++
-				let pointsResult = [correctTotal, currentRound]
-				socket.emit('GameComplete', pointsResult)
-	
 				socket.disconnect();
 				player = null;
 				currentRound = 0;
 			} else {
-				
 				currentRound++;
 				socket.emit('startGame', await getQuiz(currentRound));
-				console.log(currentRound)
+				console.log(currentRound);
 			}
 
 			// Else if wrong...
@@ -141,10 +138,9 @@ io.of('/quiz').on('connect', async socket => {
 			// If max, stop the game and give result how many points player got.
 			// Else, then keep 1up round and keep going until rounds is max
 			if (currentRound === 4) {
-
-				currentRound++
-				let pointsResult = [correctTotal, currentRound]
-				socket.emit('GameComplete', pointsResult)
+				currentRound++;
+				let pointsResult = [correctTotal, currentRound];
+				socket.emit('GameComplete', pointsResult);
 
 				//Kicks out the player
 				console.log(
@@ -160,7 +156,7 @@ io.of('/quiz').on('connect', async socket => {
 			} else {
 				currentRound++;
 				socket.emit('startGame', await getQuiz(currentRound));
-				console.log(currentRound)
+				console.log(currentRound);
 			}
 		}
 	});

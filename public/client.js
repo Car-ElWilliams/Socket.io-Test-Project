@@ -1,9 +1,8 @@
 let socket = io('/quiz');
 const log = document.getElementById('spectatorLog');
 const headlog = document.getElementById('spectatorHeader');
-const questContain = document.getElementById('questionContainer')
+const questContain = document.getElementById('questionContainer');
 const ButtonForm = document.getElementById('myForm');
-
 
 // Function to send back value to server
 function nextQuestion(answer) {
@@ -58,14 +57,13 @@ socket.on('startGame', quizData => {
 	answer4 = document.querySelector('#myAnswer4').value = allOptions[3];
 
 	mainQuestion = document.getElementById('headerAll').textContent = quizData.quizQuestion;
-
 });
 
 // When first client connect and set ready as player for question
 socket.on('newPlayer', player1 => {
 	let h2 = document.createElement('h2');
 	h2.innerHTML = 'Question:';
-	h2.id = 'headerAll'
+	h2.id = 'headerAll';
 	document.getElementById('questionContainer').appendChild(h2);
 });
 
@@ -96,18 +94,17 @@ socket.on('newSpectator', spectator => {
 
 // When player successful answer all question. Game ended.
 socket.on('GameComplete', result => {
-	log.remove
-	headlog.remove
-	ButtonForm.remove
+	log.remove;
+	headlog.remove;
+	ButtonForm.remove;
 
-	End = document.getElementById('headerAll').textContent = 'Player has finish the question!'
-	let h4 = document.createElement('h4')
+	End = document.getElementById('headerAll').textContent = 'Player has finish the question!';
+	let h4 = document.createElement('h4');
 
-	h4.innerHTML = 'Player has score ' + result[0] + '/' + result[1]
+	h4.innerHTML = 'Player has score ' + result[0] + '/' + result[1];
 
-	questContain.appendChild(h4)
-
-})
+	questContain.appendChild(h4);
+});
 
 // When player left the lobby, send message to every active clients that game ended.
 socket.on('playerLeft', spectator => {
@@ -118,4 +115,3 @@ socket.on('playerLeft', spectator => {
 	log.appendChild(GameEnd);
 	console.log('Player Left! Game End!');
 });
-
