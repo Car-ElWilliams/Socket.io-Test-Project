@@ -106,58 +106,9 @@ socket.on('startGame', quizData => {
 	// h3.innerHTML = quizQuestion;
 	// document.getElementById('questionContainer').appendChild(h3);
 
-	correctAnswer = quizData.quizCorrectAnswer;
+	// correctAnswer = quizData.quizCorrectAnswer;
 });
 
-socket.on('newQuestionFromServer', quizData => {
-	let quizQuestion = quizData.quizQuestion;
-	let quizCorrectAnswer = quizData.quizCorrectAnswer;
-	let quizIncorrectAnswers = quizData.quizIncorrectAnswers;
-	let allOptions = quizData.allOptions;
-
-	console.log(quizQuestion, quizCorrectAnswer, quizIncorrectAnswers, allOptions);
-
-	//All four answers
-	answer1 = document.querySelector('#myAnswer1').value = allOptions[0];
-	answer2 = document.querySelector('#myAnswer2').value = allOptions[1];
-	answer3 = document.querySelector('#myAnswer3').value = allOptions[2];
-	answer4 = document.querySelector('#myAnswer4').value = allOptions[3];
-	
-	// Define and replace if missing like ", ', 's and more depens what missing
-	if (quizQuestion.includes('&quot;') === true & (quizQuestion.includes('&#039;s') === true)){
-		headQuiz2 = quizQuestion.replaceAll('&#039;s', "'s")
-		headQuiz = headQuiz2.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&quot;') === true){
-		headQuiz = quizQuestion.replaceAll('&quot;', '"');
-	}
-	else if (quizQuestion.includes('&#039') === true){
-		headQuiz = quizQuestion.replaceAll('&#039;', "'");
-	}
-	else if (quizQuestion.includes('&shy;') === true){
-		headQuiz = quizQuestion.replaceAll('&shy;', "-")
-	}
-	else if (quizQuestion.includes('&#039;s')){
-		headQuiz = quizQuestion.replaceAll('&#039;s', "'s")
-	}
-	else if (quizQuestion.includes('&deg;') === true){
-		headQuiz = quizQuestion.replaceAll('&deg;', "°")
-	}
-	else {
-		headQuiz = quizQuestion
-	}
-
-	let h3 = document.createElement('h3');
-	h3.innerHTML = headQuiz;
-	document.getElementById('questionContainer').appendChild(h3);
-
-	//Reset answer
-	document.querySelector('h3 span').textContent = '';
-
-	mainQuestion = document.querySelector('h2').textContent = quizData.quizQuestion;
-
-	correctAnswer = quizData.quizCorrectAnswer;
-});
 
 socket.on('PlayerLeft', msg => {
 	console.log('Player left');
@@ -195,15 +146,7 @@ socket.on('newSpectator', spectator => {
 	// log.appendChild(resultQuest)
 });
 
-// Progress to send span spectators view of quest and player's answer
-socket.on('LogSpectator', spectator => {
-	
-
-	PlayerAnswer = quizData
-
-})
-
-// TWhen player left the lobby, send message to every active clients that game ended.
+// When player left the lobby, send message to every active clients that game ended.
 socket.on('playerLeft', spectator => {
 	let GameEnd = document.createElement('h3')
 	document.getElementById('SpecHead').innerHTML = 'The game as ended!'
