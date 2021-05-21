@@ -5,3 +5,8 @@
 3. In the root directory of the project write **npm install**
 4. In the same directory write **node index** to start the server
 5. Open up any browser and write **localhost:8000** to see the quiz
+
+
+Due issue when no one wanted to do readme.md.
+We all agree to do a quiz play by who got the lowest points have to do readme.md
+That solve very great.
