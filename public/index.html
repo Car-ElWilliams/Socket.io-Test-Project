@@ -6,18 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Quiz</title>
-    <link rel="stylesheet" href="index.css">
-    <script src="/socket.io/socket.io.js"></script>
-    
+    <link rel="stylesheet" href="index.css"> 
 </head>
 
 <body>
     <!-- Main container of chatlog and buttons -->
     <div class="container">
+        <h1 id="title" style="text-align: center;">The Quiz</h1><br>
         <div id="questionContainer">
-            <h1 id="title" style="text-align: center;">The Quiz</h1><br>
-            <!-- <h2></h2>
-            <h3></h3> -->
+            <h2 id='HeaderAll'></h2>
         </div>
 
         <div id="spectatorLog">
@@ -34,6 +31,7 @@
             <input type="button" name="Answer" id="myAnswer4" value="Answer 4" onClick="nextQuestion(this)">
         </form>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/client.js"></script>
 </body>
 
