@@ -73,32 +73,39 @@ socket.on('newPlayer', player1 => {
 socket.on('newSpectator', spectator => {
 	// Create elements
 	let h2 = document.createElement('h2');
+	let h3 = document.createElement('h3');
 	let span = document.createElement('span');
 	let resultQuest = document.createElement('div');
 
+
+	
+
 	// Add id for them to use replace string later on
 	resultQuest.id = 'resultQuest';
-	h2.id = 'SpecHead';
+	h3.id = 'SpecHead';
 	span.id = 'SpecSpan';
+	h2.id = 'headerAll'
+	
 
 	// Add string contain in element
-	h2.innerHTML = 'You are a Spectator';
+	h3.innerHTML = 'You are a Spectator';
 	span.innerHTML = 'You join spectator automatic for a reason max player is 1.';
 
 	// Due button is already loaded in html, remove them.
 	ButtonForm.remove();
 
 	// appendChild together to div with id spectatorHeader already in HTML
-	spectatorHeader.appendChild(h2);
+	spectatorHeader.appendChild(h3);
 	spectatorHeader.appendChild(span);
+	questContain.appendChild(h2)
 	// log.appendChild(resultQuest)
 });
 
 // When player successful answer all question. Game ended.
 socket.on('GameComplete', result => {
-	log.remove
-	headlog.remove
-	ButtonForm.remove
+	log.remove();
+	headlog.remove();
+	ButtonForm.remove();
 
 	End = document.getElementById('headerAll').textContent = 'Player has finish the question!'
 	let h4 = document.createElement('h4')

@@ -71,8 +71,11 @@ app.get('/', (req, res) => {
 
 // Socket io with by clients connect to side /quiz
 io.of('/quiz').on('connect', async socket => {
+
+	console.log(socket.id)
 	let quizLobby = 'Player Lobby';
 	socket.join(quizLobby);
+
 
 	io.in(quizLobby);
 
@@ -119,9 +122,9 @@ io.of('/quiz').on('connect', async socket => {
 
 				currentRound++
 				let pointsResult = [correctTotal, currentRound]
-				socket.emit('GameComplete', pointsResult)
+				io.of('/quiz').emit('GameComplete', pointsResult)
 	
-				socket.disconnect();
+				// socket.disconnect();
 				player = null;
 				currentRound = 0;
 			} else {
@@ -144,7 +147,7 @@ io.of('/quiz').on('connect', async socket => {
 
 				currentRound++
 				let pointsResult = [correctTotal, currentRound]
-				socket.emit('GameComplete', pointsResult)
+				io.of('/quiz').emit('GameComplete', pointsResult)
 
 				//Kicks out the player
 				console.log(
@@ -154,7 +157,7 @@ io.of('/quiz').on('connect', async socket => {
 					socket.id
 				);
 
-				socket.disconnect();
+				// socket.disconnect();
 				player = null;
 				currentRound = 0;
 			} else {
@@ -166,8 +169,8 @@ io.of('/quiz').on('connect', async socket => {
 	});
 
 	// When client disconnect
-	socket.on('disconnect', socket => {
-		console.log(`client has left ${socket}`);
+	socket.on('disconnect', () => {
+		console.log(`client has left ${socket.id}`);
 
 		// If choosen player left the lobby
 		if (player === socket.id) {
