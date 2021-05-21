@@ -1,3 +1,5 @@
+##Socket IO Project
+
 1. Open a terminal and cd into a desired folder and clone the project with **git clone name-of-project-url** 
 2. In the terminal **cd** into the project
 3. In the root directory of the project write **npm install**
