@@ -33,7 +33,6 @@ async function getQuiz(round) {
 				params: { encode: 'url3986' },
 			}
 		);
-		//console.log(response.data.results[currentRound]);
 
 		// Quiz question, answer and incorrect answers
 		quizQuestion = decodeURIComponent(response.data.results[round].question);
@@ -45,17 +44,7 @@ async function getQuiz(round) {
 		allOptions = flattenAllOptions;
 
 		shuffleArray(allOptions);
-		//console.log(
-		//	'Question is:',
-		//	quizQuestion,
-		//	'Answer is:',
-		//	quizCorrectAnswer,
-		//	'incorrect answers are:',
-		//	quizIncorrectAnswers,
-		//	'All answers are',
-		//	allOptions
-		//);
-		// console.log('from getQuiz', allOptions);
+
 		return { quizQuestion, allOptions };
 	} catch (error) {
 		console.error(error.message);
@@ -105,6 +94,7 @@ io.of('/quiz').on('connect', async socket => {
 		let SpectatorRoom = 'Spectator';
 		socket.join(SpectatorRoom);
 
+		console.log('Who is the player: ', player);
 		socket.emit('newSpectator');
 		console.log(`${socket.id} has been moved to Spectator. (Reason: Max player is 1)`);
 	}
@@ -130,8 +120,10 @@ io.of('/quiz').on('connect', async socket => {
 				currentRound++
 				let pointsResult = [correctTotal, currentRound]
 				socket.emit('GameComplete', pointsResult)
-				console.log('5 Done')
-
+	
+				socket.disconnect();
+				player = null;
+				currentRound = 0;
 			} else {
 				
 				currentRound++;
@@ -153,8 +145,18 @@ io.of('/quiz').on('connect', async socket => {
 				currentRound++
 				let pointsResult = [correctTotal, currentRound]
 				socket.emit('GameComplete', pointsResult)
-				console.log('5 Done')
 
+				//Kicks out the player
+				console.log(
+					'GAme END. Player has been kicked out:',
+					player,
+					'socketID has been kicked out, ouch:',
+					socket.id
+				);
+
+				socket.disconnect();
+				player = null;
+				currentRound = 0;
 			} else {
 				currentRound++;
 				socket.emit('startGame', await getQuiz(currentRound));
@@ -165,8 +167,7 @@ io.of('/quiz').on('connect', async socket => {
 
 	// When client disconnect
 	socket.on('disconnect', socket => {
-		console.log(socket.id);
-		console.log(`client has left ${socket.id}`);
+		console.log(`client has left ${socket}`);
 
 		// If choosen player left the lobby
 		if (player === socket.id) {
